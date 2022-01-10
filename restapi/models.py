@@ -61,3 +61,8 @@ class Student(models.Model):
         verbose_name = 'Student'
         verbose_name_plural = 'Students'
 
+
+class OneTimeUrl(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=150)
+    is_used = models.BooleanField(default=False)

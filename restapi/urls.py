@@ -6,22 +6,15 @@ from django.urls import (
 
 from rest_framework.routers import DefaultRouter
 from .views import (
-    some_function,
-    sample_view,
-    BanksDetails,
-    BankInfo,
-    BanksViewSet,
-    BanksDetail,
-    BanksList,
-    BanksListGenerics,
-    BanksDetailGenerics,
-    LoginView,
-    Logout,
-    SignUp,
-    StudentListGenerics,
+    some_function, sample_view,
+    BanksDetails, BankInfo,
+    BanksViewSet, BanksDetail,
+    BanksList, BanksListGenerics,
+    BanksDetailGenerics, LoginView,
+    Logout, SignUp,
+    StudentListGenerics, SendUrl,
     StudentDetailGenerics,
-    StudentDetails,
-
+    StudentDetails, ResetPassword,
 )
 
 #
@@ -61,4 +54,9 @@ urlpatterns += [
 urlpatterns += [
     path('student/', StudentListGenerics.as_view()),
     path('student/<int:id>/', StudentDetailGenerics.as_view())
+]
+
+urlpatterns += [
+    path('reset.password/', SendUrl.as_view()),
+    path('reset.password/<str token>/', ResetPassword.as_view())
 ]

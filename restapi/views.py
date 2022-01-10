@@ -12,6 +12,8 @@ from rest_framework import (
     generics,
     mixins
 )
+from random import randint
+from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -19,14 +21,17 @@ from rest_framework.authentication import TokenAuthentication
 
 from .models import (
     Banks,
-    Student
+    Student,
+    OneTimeUrl,
+    User
 )
 from .serializer import (
     BanksSerializer2,
     UserSerializer,
     StudentSerializer,
     StudentSerializer1,
-    StudentSerializer2
+    StudentSerializer2,
+    UserSerializerMir
 )
 
 
@@ -303,3 +308,23 @@ class StudentDetails(APIView):
         student = get_object_or_404(Student, id=id)
         student.delete()
         return Response({"request": "Your data is deleted"}, status=status.HTTP_200_OK)
+
+
+class SendUrl(APIView):
+    def post(self, request):
+        user = get_object_or_404(User, username=request.data.get('username'))
+        token = randint(1000000000000, 100000000000000000000000000)
+        url = OneTimeUrl.objects.create(user_id=user, token=token)
+        return Response({'url to reset password':f"http://127.0.0.1:8000/api/resetpassword/{token}/"})
+
+
+class ResetPassword(APIView):
+    def post(self, request, token):
+        otu = OneTimeUrl.objects.get(token=token)
+        password = request.data.get('password')
+        if not otu.is_used and password is not None:
+            user = User.objects.filter(pk=otu.user_id.id).update(password=make_password(password))
+            otu.is_used = True
+            otu.save()
+            return Response({'request': "Ваш пароль успешно сменен"})
+        return Response({'request': "Эта ссылка уже не доступна"})
