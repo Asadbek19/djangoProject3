@@ -57,6 +57,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('reset.password/', SendUrl.as_view()),
-    path('reset.password/<str token>/', ResetPassword.as_view())
+    path('resetpassword/', SendUrl.as_view()),
+    path('resetpassword/<str:token>/', ResetPassword.as_view())
 ]

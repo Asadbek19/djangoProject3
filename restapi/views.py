@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from django.shortcuts import (
     get_object_or_404,
@@ -315,7 +316,24 @@ class SendUrl(APIView):
         user = get_object_or_404(User, username=request.data.get('username'))
         token = randint(1000000000000, 100000000000000000000000000)
         url = OneTimeUrl.objects.create(user_id=user, token=token)
-        return Response({'url to reset password':f"http://127.0.0.1:8000/api/resetpassword/{token}/"})
+        # return Response({'url to reset password':f"http://127.0.0.1:8000/api/resetpassword/{token}/"})
+# 11.01.2022 #
+        headers = {
+            "Authorization": "Bearer{}".format("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9ub3RpZnkuZXNraXoudXpcL2FwaVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDE4MzI3NzEsImV4cCI6MTY0NDQyNDc3MSwibmJmIjoxNjQxODMyNzcxLCJqdGkiOiI1V3RSZ0hhbko5MGh6NlM3Iiwic3ViIjo1LCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.fENou5x9p5jFQQvtt2KapOFDTIEEHqC00Mtb5cmkUMQ")
+        }
+        data = {
+            "mobile_phone": request.data.get('phone'),
+            "message": f"http://127.0.0.1:8000/api/resetpassword/{token}/",
+            "form": 4546
+        }
+        requests.post(
+            url='http://notify.eskiz.uz/api/message/sms/send',
+            data=data,
+            headers=headers
+        )
+        return Response({'url to reset password': ""})
+
+# 11.01.2022 #
 
 
 class ResetPassword(APIView):
@@ -328,3 +346,4 @@ class ResetPassword(APIView):
             otu.save()
             return Response({'request': "Ваш пароль успешно сменен"})
         return Response({'request': "Эта ссылка уже не доступна"})
+

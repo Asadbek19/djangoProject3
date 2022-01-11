@@ -19,11 +19,11 @@ class Banks(models.Model):
     n_of_emp = models.IntegerField()
     aff_com = models.CharField(null=True, blank=True, max_length=500)
 
-
-@receiver(post_save, sender=User)
-def ser_password(sender, instance, *args, **kwargs):
-    password = make_password(instance.password)
-    User.objects.filter(pk=instance.id).update(password=password)
+#
+# @receiver(post_save, sender=User)
+# def ser_password(sender, instance, *args, **kwargs):
+#     password = make_password(instance.password)
+#     User.objects.filter(pk=instance.id).update(password=password)
 
 
 #  08/01/2022  #
