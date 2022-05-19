@@ -36,11 +36,6 @@ from .serializer import (
 )
 
 
-# @api_view(http_method_names=['GET', 'POST'])
-# def some_function(request):
-#     print(request.method)
-#     return Response({})
-
 @api_view(http_method_names=['GET', 'POST'])
 def some_function(request):
     if request.method == 'GET':
@@ -240,8 +235,6 @@ class BanksDetailGenerics(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BanksSerializer2
 
 
-# 7 January 2022 year
-
 class LoginView(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
@@ -275,9 +268,6 @@ class SignUp(APIView):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#  08/01/2022  #
-
-
 class StudentListGenerics(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -287,8 +277,6 @@ class StudentDetailGenerics(generics.RetrieveDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-
-# 10.01.2022 #
 
 class StudentDetails(APIView):
 
